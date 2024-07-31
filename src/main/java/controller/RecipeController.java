@@ -28,15 +28,16 @@ public class RecipeController {
 
     @PostMapping
     public ResponseEntity<Recipe> createRecipe(@RequestBody Recipe recipe) {
-        Recipe newRecipe = recipeService.saveRecipe(recipe);
-        return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
+        Optional<Recipe> newRecipe = recipeService.saveRecipe(recipe);
+        return newRecipe.map(value -> new ResponseEntity<>(value, HttpStatus.CREATED))
+                        .orElseGet(() -> new ResponseEntity<>(HttpStatus.CONFLICT)); // Not sure if BAD_REQUEST is better here
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Recipe> getRecipeById(@PathVariable String id) {
         Optional<Recipe> recipe = recipeService.findRecipeById(id);
         return recipe.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("/{id}")

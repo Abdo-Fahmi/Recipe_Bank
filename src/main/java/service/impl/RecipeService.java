@@ -22,9 +22,11 @@ public class RecipeService implements service.RecipeService {
     }
 
     @Override
-    public Recipe saveRecipe(Recipe recipe) {
-        recipe.setId(counterService.getNextSequence("recipe"));
-        return recipeRepo.save(recipe);
+    public Optional<Recipe> saveRecipe(Recipe recipe) {
+        if(recipeRepo.existsById(recipe.getId())) return Optional.empty();
+
+        Recipe savedRecipe = recipeRepo.save(recipe);
+        return Optional.of(savedRecipe);
     }
 
     @Override

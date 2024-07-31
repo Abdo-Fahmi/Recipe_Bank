@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface RecipeRepository extends MongoRepository<Recipe, String> {
 
-    // TODO understand query tag better
     @Query("{ 'tags': { $in: ?0 } }")
     List<Recipe> findByTagsIn(List<String> tag);
 

@@ -4,6 +4,7 @@ import model.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import repository.UserRepository;
+import service.CounterService;
 
 import java.util.Optional;
 
@@ -11,37 +12,44 @@ import java.util.Optional;
 public class UserService implements service.UserService {
 
     private final UserRepository userRepo;
+    private final CounterService counterService;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepo, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepo, CounterService counterService, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
+        this.counterService = counterService;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public User registerUser(User user) {
+    public Optional<User> registerUser(User user) {
+        if(userRepo.existsByEmail(user.getEmail())) return Optional.empty();
+
+        user.setId(counterService.getNextSequence("user"));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepo.save(user);
+        User newUser = userRepo.save(user);
+        return Optional.of(newUser);
     }
 
     @Override
-    public void deleteById(String id) {
-        userRepo.deleteById(id);
+    public boolean deleteUserById(String id) {
+        return userRepo.findById(id).map(user -> {
+            userRepo.delete(user);
+            return true;
+        }).orElse(false);
     }
 
     @Override
-    public Optional<User> findById(String id) {
+    public Optional<User> updateUser(String id, User user) {
+        return userRepo.findById(user.getId()).map(existingUser ->{
+            user.setId(id); // Making sure the id stays the same after updating
+            user.setPassword(passwordEncoder.encode(user.getPassword())); // re-encoding the password before saving the user again
+            return Optional.of(userRepo.save(user));
+        }).orElse(Optional.empty());
+    }
+
+    @Override
+    public Optional<User> findUserById(String id) {
         return userRepo.findById(id);
-    }
-
-    @Override
-    public Optional<User> findByUsername(String username) {
-        return userRepo.findByUsername(username);
-    }
-
-    @Override
-    public User updateUser(User user) {
-        if(!userRepo.existsById(user.getId())) throw new RuntimeException("User not found");
-        return userRepo.save(user);
     }
 }

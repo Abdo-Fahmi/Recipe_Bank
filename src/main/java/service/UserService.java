@@ -5,9 +5,8 @@ import model.User;
 import java.util.Optional;
 
 public interface UserService {
-    boolean registerUser(User user);
+    Optional<User> registerUser(User user);
     boolean deleteUserById(String id);
-    User updateUser(User user);
+    Optional<User> updateUser(String id, User user);
     Optional<User> findUserById(String id);
-
 }

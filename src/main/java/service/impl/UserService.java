@@ -23,7 +23,7 @@ public class UserService implements service.UserService {
 
     @Override
     public Optional<User> registerUser(User user) {
-        if(userRepo.existsByEmail(user.getEmail())) return Optional.empty();
+        if(userRepo.existsByEmail(user.getEmail())) return Optional.empty(); // Email already exists
 
         user.setId(counterService.getNextSequence("user"));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -51,5 +51,10 @@ public class UserService implements service.UserService {
     @Override
     public Optional<User> findUserById(String id) {
         return userRepo.findById(id);
+    }
+
+    @Override
+    public Optional<User> findUserByName(String name) {
+        return userRepo.findByName(name);
     }
 }

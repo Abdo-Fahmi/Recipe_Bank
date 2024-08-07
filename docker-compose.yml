@@ -23,8 +23,26 @@ services:
             - ME_CONFIG_MONGODB_PORT=27017
             - ME_CONFIG_MONGODB_SERVER=mongodb
             - ME_CONFIG_MONGODB_URL=mongodb://mongodb:27017
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: Recipe_Bank
+        depends_on:
+            - mongodb
+        ports:
+            - 8080:8080
+        environment:
+            - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/Recipe_Bank
+            - SPRING_PROFILES_ACTIVE=docker
+        networks:
+            - app-network
 
 volumes:
     mongo-data: {}
+
+networks:
+    app-network:
+        driver: bridge
 
 

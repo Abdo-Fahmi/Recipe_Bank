@@ -1,11 +1,11 @@
-package controller;
+package com.Abdo_Fahmi.Recipe_Bank.controller;
 
-import model.Recipe;
+import com.Abdo_Fahmi.Recipe_Bank.model.Recipe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.impl.RecipeService;
+import com.Abdo_Fahmi.Recipe_Bank.service.impl.RecipeService;
 
 import java.util.List;
 import java.util.Optional;
@@ -65,4 +65,6 @@ public class RecipeController {
         List<Recipe> searchResults = recipeService.findRecipesByIngredients(ingredients);
         return new ResponseEntity<>(searchResults, HttpStatus.OK);
     }
+
+    // TODO findByOwnerId - after implementing CustomUserDetails
 }

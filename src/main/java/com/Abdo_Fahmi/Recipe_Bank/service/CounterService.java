@@ -1,6 +1,6 @@
-package service;
+package com.Abdo_Fahmi.Recipe_Bank.service;
 
-import model.Counter;
+import com.Abdo_Fahmi.Recipe_Bank.model.Counter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;

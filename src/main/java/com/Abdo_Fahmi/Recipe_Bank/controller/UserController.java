@@ -1,15 +1,12 @@
-package controller;
+package com.Abdo_Fahmi.Recipe_Bank.controller;
 
-import model.User;
+import com.Abdo_Fahmi.Recipe_Bank.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
+//import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
-import service.UserService;
-
-import javax.swing.text.html.Option;
-import java.util.Optional;
+import com.Abdo_Fahmi.Recipe_Bank.service.UserService;
 
 @RestController
 @RequestMapping("/users")
@@ -32,7 +29,7 @@ public class UserController {
 
     // return NOCONTENT on successful delete
     //        NOTFOUND if user doesn't exist
-    @DeleteMapping("/{id")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable String id) {
         return userService.deleteUserById(id)
                 ? new ResponseEntity<>(HttpStatus.NO_CONTENT)

@@ -1,4 +1,4 @@
-package model;
+package com.Abdo_Fahmi.Recipe_Bank.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,15 +7,20 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Data
-@Document(collection = "users")
+@Document(collection = "recipes")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User {
+public class Recipe {
     @Id
     private String id;
-    private String username;
-    private String password;
-    private String email;
+    private String name;
+    private String description;
+    private List<String> tags;
+    private List<Ingredient> ingredients;
+
+    private String ownerId;
 }

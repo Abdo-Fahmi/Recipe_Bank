@@ -1,6 +1,6 @@
-package repository;
+package com.Abdo_Fahmi.Recipe_Bank.repository;
 
-import model.Recipe;
+import com.Abdo_Fahmi.Recipe_Bank.model.Recipe;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 

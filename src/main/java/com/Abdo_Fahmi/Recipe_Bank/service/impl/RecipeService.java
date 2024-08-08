@@ -1,16 +1,16 @@
-package service.impl;
+package com.Abdo_Fahmi.Recipe_Bank.service.impl;
 
-import model.Recipe;
+import com.Abdo_Fahmi.Recipe_Bank.model.Recipe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import repository.RecipeRepository;
-import service.CounterService;
+import com.Abdo_Fahmi.Recipe_Bank.repository.RecipeRepository;
+import com.Abdo_Fahmi.Recipe_Bank.service.CounterService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class RecipeService implements service.RecipeService {
+public class RecipeService implements com.Abdo_Fahmi.Recipe_Bank.service.RecipeService {
 
     private final RecipeRepository recipeRepo;
     private final CounterService counterService;

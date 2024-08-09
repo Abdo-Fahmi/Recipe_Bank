@@ -2,7 +2,6 @@ package com.Abdo_Fahmi.Recipe_Bank.service.impl;
 
 import com.Abdo_Fahmi.Recipe_Bank.model.User;
 //import org.springframework.security.crypto.password.PasswordEncoder;
-import com.Abdo_Fahmi.Recipe_Bank.service.CounterService;
 import org.springframework.stereotype.Service;
 import com.Abdo_Fahmi.Recipe_Bank.repository.UserRepository;
 
@@ -12,12 +11,10 @@ import java.util.Optional;
 public class UserService implements com.Abdo_Fahmi.Recipe_Bank.service.UserService {
 
     private final UserRepository userRepo;
-    private final CounterService counterService;
     //private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepo, CounterService counterService) {
+    public UserService(UserRepository userRepo) {
         this.userRepo = userRepo;
-        this.counterService = counterService;
         //this.passwordEncoder = passwordEncoder;
     }
 
@@ -25,7 +22,6 @@ public class UserService implements com.Abdo_Fahmi.Recipe_Bank.service.UserServi
     public Optional<User> registerUser(User user) {
         if(userRepo.existsByEmail(user.getEmail())) return Optional.empty(); // Email already exists
 
-        user.setId(counterService.getNextSequence("user"));
         //user.setPassword(passwordEncoder.encode(user.getPassword()));
         User newUser = userRepo.save(user);
         return Optional.of(newUser);

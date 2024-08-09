@@ -4,7 +4,6 @@ import com.Abdo_Fahmi.Recipe_Bank.model.Recipe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.Abdo_Fahmi.Recipe_Bank.repository.RecipeRepository;
-import com.Abdo_Fahmi.Recipe_Bank.service.CounterService;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,18 +12,16 @@ import java.util.Optional;
 public class RecipeService implements com.Abdo_Fahmi.Recipe_Bank.service.RecipeService {
 
     private final RecipeRepository recipeRepo;
-    private final CounterService counterService;
 
     @Autowired
-    public RecipeService(final RecipeRepository recipeRepo, CounterService counterService) {
+    public RecipeService(final RecipeRepository recipeRepo) {
         this.recipeRepo = recipeRepo;
-        this.counterService = counterService;
     }
 
     @Override
     public Optional<Recipe> saveRecipe(Recipe recipe) {
-        if(recipeRepo.existsById(recipe.getId())) return Optional.empty();
-        recipe.setId(counterService.getNextSequence("recipe"));
+        //if(recipeRepo.existsById(recipe.getId())) return Optional.empty();
+        System.out.println("Generated ID: " + recipe.getId());
         Recipe savedRecipe = recipeRepo.save(recipe);
         return Optional.of(savedRecipe);
     }

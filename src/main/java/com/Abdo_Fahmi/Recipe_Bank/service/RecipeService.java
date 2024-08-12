@@ -1,6 +1,6 @@
 package com.Abdo_Fahmi.Recipe_Bank.service;
 
-import com.Abdo_Fahmi.Recipe_Bank.model.Recipe;
+import com.Abdo_Fahmi.Recipe_Bank.model.recipe.Recipe;
 
 import java.util.List;
 import java.util.Optional;

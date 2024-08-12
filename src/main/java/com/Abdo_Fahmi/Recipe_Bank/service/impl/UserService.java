@@ -1,56 +1,81 @@
 package com.Abdo_Fahmi.Recipe_Bank.service.impl;
 
-import com.Abdo_Fahmi.Recipe_Bank.model.User;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
+import com.Abdo_Fahmi.Recipe_Bank.exception.EmailAlreadyInUseException;
+import com.Abdo_Fahmi.Recipe_Bank.exception.NameAlreadyInUseException;
+import com.Abdo_Fahmi.Recipe_Bank.exception.UserNotFoundException;
+import com.Abdo_Fahmi.Recipe_Bank.model.user.User;
+import com.Abdo_Fahmi.Recipe_Bank.service.IUserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import com.Abdo_Fahmi.Recipe_Bank.model.user.UserRegistrationDTO;
+import com.Abdo_Fahmi.Recipe_Bank.model.user.UserDTO;
+import com.Abdo_Fahmi.Recipe_Bank.model.user.UserMapper;
 import com.Abdo_Fahmi.Recipe_Bank.repository.UserRepository;
-
-import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 @Service
-public class UserService implements com.Abdo_Fahmi.Recipe_Bank.service.UserService {
+public class UserService implements IUserService {
 
     private final UserRepository userRepo;
-    //private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepo) {
+    public UserService(UserRepository userRepo, UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
-        //this.passwordEncoder = passwordEncoder;
+        this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public Optional<User> registerUser(User user) {
-        if(userRepo.existsByEmail(user.getEmail())) return Optional.empty(); // Email already exists
+    public UserDTO registerUser(UserRegistrationDTO user) {
+        if(userRepo.existsByName(user.name())) throw new NameAlreadyInUseException("Name is already taken by another user");
+        if(userRepo.existsByEmail(user.email())) throw new EmailAlreadyInUseException("Email is already in use");
 
-        //user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User newUser = userRepo.save(user);
-        return Optional.of(newUser);
+        User newUser = User.builder()
+                .email(user.email())
+                .name(user.name())
+                .password(passwordEncoder.encode(user.password()))
+                .build();
+
+        newUser = userRepo.save(newUser);
+
+        return userMapper.toResponseDTO(newUser);
     }
 
     @Override
-    public boolean deleteUserById(String id) {
-        return userRepo.findById(id).map(user -> {
-            userRepo.delete(user);
-            return true;
-        }).orElse(false);
+    public void deleteUserById(String id) {
+        if(!userRepo.existsById(id)) throw new UserNotFoundException("User doesn't exist");
+        userRepo.deleteById(id);
     }
 
     @Override
-    public Optional<User> updateUser(String id, User user) {
-        return userRepo.findById(user.getId()).map(existingUser ->{
-            user.setId(id); // Making sure the id stays the same after updating
-            //user.setPassword(passwordEncoder.encode(user.getPassword())); // re-encoding the password before saving the user again
-            return Optional.of(userRepo.save(user));
-        }).orElse(Optional.empty());
+    public UserDTO updateUser(String id, UserDTO user) {
+        User updatedUser = userRepo.findById(id)
+                                   .orElseThrow(() -> new UserNotFoundException("User doesn't exists"));
+
+        // Checking if the provided info to update is already in use or not
+        if(userRepo.existsByName(user.name())) throw new NameAlreadyInUseException("Name is already taken by another user");
+        if(userRepo.existsByEmail(user.email())) throw new EmailAlreadyInUseException("Email is already in use");
+
+        // Applying changes
+        updatedUser.setName(user.name());
+        updatedUser.setEmail(user.email());
+
+        updatedUser = userRepo.save(updatedUser);
+
+        return userMapper.toResponseDTO(updatedUser);
     }
 
     @Override
-    public Optional<User> findUserById(String id) {
-        return userRepo.findById(id);
+    public UserDTO findUserById(String userId) {
+        User user = userRepo.findById(userId)
+                            .orElseThrow(() -> new UserNotFoundException("User not found"));
+        return userMapper.toResponseDTO(user);
     }
 
     @Override
-    public Optional<User> findUserByName(String name) {
-        return userRepo.findByName(name);
+    public UserDTO findUserByName(String name) {
+        User user = userRepo.findById(name)
+                            .orElseThrow(() -> new UserNotFoundException("User not found"));
+        return userMapper.toResponseDTO(user);
     }
 }

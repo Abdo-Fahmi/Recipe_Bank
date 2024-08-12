@@ -1,12 +1,13 @@
 package com.Abdo_Fahmi.Recipe_Bank.controller;
 
-import com.Abdo_Fahmi.Recipe_Bank.model.User;
+import com.Abdo_Fahmi.Recipe_Bank.model.user.User;
+import com.Abdo_Fahmi.Recipe_Bank.model.user.UserRegistrationDTO;
+import com.Abdo_Fahmi.Recipe_Bank.model.user.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
-import com.Abdo_Fahmi.Recipe_Bank.service.UserService;
+import com.Abdo_Fahmi.Recipe_Bank.service.impl.UserService;
 
 @RestController
 @RequestMapping("/users")
@@ -14,52 +15,37 @@ public class UserController {
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserService UserService) {
+        this.userService = UserService;
     }
 
-    // return CREATED on successful register
-    //        CONFLICT if requested email is already in use
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        return userService.registerUser(user)
-                .map(newUser -> new ResponseEntity<>(newUser, HttpStatus.CREATED))
-                .orElse(new ResponseEntity<>(HttpStatus.CONFLICT));
+    public ResponseEntity<UserDTO> registerUser(@RequestBody UserRegistrationDTO user) {
+        UserDTO userDTO = userService.registerUser(user);
+        return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
 
-    // return NOCONTENT on successful delete
-    //        NOTFOUND if user doesn't exist
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable String id) {
-        return userService.deleteUserById(id)
-                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        userService.deleteUserById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // return OK on successful update
-    //        NOTFOUND if user doesn't exist
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User user) {
-        return userService.updateUser(id, user)
-                .map(updatedUser -> new ResponseEntity<>(updatedUser, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<UserDTO> updateUser(@PathVariable String id, @RequestBody UserDTO user) {
+        UserDTO updatedUser = userService.updateUser(id, user);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
-    // return OK on successful update
-    //        NOTFOUND if user doesn't exist
     @GetMapping("/{id}")
-    public ResponseEntity<User> findUserById(@PathVariable String id) {
-        return userService.findUserById(id)
-                .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<UserDTO> findUserById(@PathVariable String id) {
+        UserDTO foundUserDTO = userService.findUserById(id);
+        return new ResponseEntity<>(foundUserDTO, HttpStatus.FOUND);
     }
 
-    // return OK on successful update
-    //        NOTFOUND if user doesn't exist
     @GetMapping("/search")
-    public ResponseEntity<User> findUserByName(@RequestParam String name) {
-        return userService.findUserByName(name)
-                .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<UserDTO> findUserByName(@RequestParam String name) {
+        UserDTO foundUserDTO = userService.findUserByName(name);
+        return new ResponseEntity<>(foundUserDTO, HttpStatus.FOUND);
     }
 }

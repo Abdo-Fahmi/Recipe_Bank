@@ -1,6 +1,6 @@
 package com.Abdo_Fahmi.Recipe_Bank.service.impl;
 
-import com.Abdo_Fahmi.Recipe_Bank.model.Recipe;
+import com.Abdo_Fahmi.Recipe_Bank.model.recipe.Recipe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.Abdo_Fahmi.Recipe_Bank.repository.RecipeRepository;
@@ -20,8 +20,7 @@ public class RecipeService implements com.Abdo_Fahmi.Recipe_Bank.service.RecipeS
 
     @Override
     public Optional<Recipe> saveRecipe(Recipe recipe) {
-        //if(recipeRepo.existsById(recipe.getId())) return Optional.empty();
-        System.out.println("Generated ID: " + recipe.getId());
+        if(recipeRepo.existsById(recipe.getId())) return Optional.empty();
         Recipe savedRecipe = recipeRepo.save(recipe);
         return Optional.of(savedRecipe);
     }

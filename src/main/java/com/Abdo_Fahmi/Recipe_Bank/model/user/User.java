@@ -1,4 +1,4 @@
-package com.Abdo_Fahmi.Recipe_Bank.model;
+package com.Abdo_Fahmi.Recipe_Bank.model.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,10 +8,10 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Document(collection = "users")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Document(collection = "users")
 public class User {
     @Id
     private String id;

@@ -1,6 +1,6 @@
 package com.Abdo_Fahmi.Recipe_Bank.controller;
 
-import com.Abdo_Fahmi.Recipe_Bank.model.Recipe;
+import com.Abdo_Fahmi.Recipe_Bank.model.recipe.Recipe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

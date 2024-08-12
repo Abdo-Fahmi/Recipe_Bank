@@ -1,6 +1,6 @@
 services:
     mongodb:
-        image: mongo
+        image: mongo:latest
         container_name: mongodb
         ports:
             - 27017:27017
@@ -12,7 +12,7 @@ services:
         volumes:
             - mongo-data:/data
     mongo-express:
-        image: mongo-express
+        image: mongo-express:latest
         container_name: mongo-express
         restart: always
         depends_on:

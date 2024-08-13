@@ -1,14 +1,9 @@
-package com.Abdo_Fahmi.Recipe_Bank.service;
+package com.Abdo_Fahmi.Recipe_Bank.user;
 
 import com.Abdo_Fahmi.Recipe_Bank.exception.EmailAlreadyInUseException;
 import com.Abdo_Fahmi.Recipe_Bank.exception.NameAlreadyInUseException;
 import com.Abdo_Fahmi.Recipe_Bank.exception.UserNotFoundException;
-import com.Abdo_Fahmi.Recipe_Bank.model.user.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import com.Abdo_Fahmi.Recipe_Bank.model.user.UserRegistrationDTO;
-import com.Abdo_Fahmi.Recipe_Bank.model.user.UserDTO;
-import com.Abdo_Fahmi.Recipe_Bank.model.user.UserMapper;
-import com.Abdo_Fahmi.Recipe_Bank.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service

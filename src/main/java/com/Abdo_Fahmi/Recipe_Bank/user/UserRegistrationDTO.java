@@ -1,4 +1,4 @@
-package com.Abdo_Fahmi.Recipe_Bank.model.user;
+package com.Abdo_Fahmi.Recipe_Bank.user;
 
 import lombok.Builder;
 

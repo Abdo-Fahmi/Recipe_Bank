@@ -1,12 +1,9 @@
-package com.Abdo_Fahmi.Recipe_Bank.controller;
+package com.Abdo_Fahmi.Recipe_Bank.user;
 
-import com.Abdo_Fahmi.Recipe_Bank.model.user.UserRegistrationDTO;
-import com.Abdo_Fahmi.Recipe_Bank.model.user.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.Abdo_Fahmi.Recipe_Bank.service.UserService;
 
 @RestController
 @RequestMapping("/users")

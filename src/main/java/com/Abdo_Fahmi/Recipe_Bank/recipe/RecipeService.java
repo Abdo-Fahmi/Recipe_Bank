@@ -1,9 +1,7 @@
-package com.Abdo_Fahmi.Recipe_Bank.service;
+package com.Abdo_Fahmi.Recipe_Bank.recipe;
 
-import com.Abdo_Fahmi.Recipe_Bank.model.recipe.Recipe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.Abdo_Fahmi.Recipe_Bank.repository.RecipeRepository;
 
 import java.util.List;
 import java.util.Optional;

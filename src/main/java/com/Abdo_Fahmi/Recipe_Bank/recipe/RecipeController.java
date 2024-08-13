@@ -1,11 +1,9 @@
-package com.Abdo_Fahmi.Recipe_Bank.controller;
+package com.Abdo_Fahmi.Recipe_Bank.recipe;
 
-import com.Abdo_Fahmi.Recipe_Bank.model.recipe.Recipe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.Abdo_Fahmi.Recipe_Bank.service.RecipeService;
 
 import java.util.List;
 import java.util.Optional;

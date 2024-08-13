@@ -1,4 +1,4 @@
-package com.Abdo_Fahmi.Recipe_Bank.model.recipe;
+package com.Abdo_Fahmi.Recipe_Bank.recipe;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

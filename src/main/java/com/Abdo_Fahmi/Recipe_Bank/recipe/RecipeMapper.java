@@ -1,4 +1,4 @@
-package com.Abdo_Fahmi.Recipe_Bank.model.recipe;
+package com.Abdo_Fahmi.Recipe_Bank.recipe;
 
 import lombok.experimental.UtilityClass;
 import org.springframework.stereotype.Component;

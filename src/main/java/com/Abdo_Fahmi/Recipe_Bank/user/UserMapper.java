@@ -1,4 +1,4 @@
-package com.Abdo_Fahmi.Recipe_Bank.model.user;
+package com.Abdo_Fahmi.Recipe_Bank.user;
 
 import org.springframework.stereotype.Component;
 
@@ -27,5 +27,4 @@ public class UserMapper {
                 .email(dto.email())
                 .build();
     }
-
 }

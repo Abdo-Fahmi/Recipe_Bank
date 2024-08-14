@@ -19,48 +19,44 @@ public class RecipeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Recipe>> getAllRecipes() {
-        List<Recipe> recipes = recipeService.getAllRecipes();
+    public ResponseEntity<List<RecipeDTO>> getAllRecipes() {
+        List<RecipeDTO> recipes = recipeService.getAllRecipes();
         return new ResponseEntity<>(recipes, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Recipe> createRecipe(@RequestBody Recipe recipe) {
-        Optional<Recipe> newRecipe = recipeService.saveRecipe(recipe);
-        return newRecipe.map(value -> new ResponseEntity<>(value, HttpStatus.CREATED))
-                        .orElseGet(() -> new ResponseEntity<>(HttpStatus.CONFLICT)); // Not sure if BAD_REQUEST is better here
+    public ResponseEntity<RecipeDTO> createRecipe(@RequestBody RecipeCreationDTO recipe) {
+        RecipeDTO newRecipe = recipeService.saveRecipe(recipe);
+        return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Recipe> getRecipeById(@PathVariable String id) {
-        Optional<Recipe> recipe = recipeService.findRecipeById(id);
-        return recipe.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<RecipeDTO> getRecipeById(@PathVariable String id) {
+        RecipeDTO recipe = recipeService.findRecipeById(id);
+        return new ResponseEntity<>(recipe, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRecipeById(@PathVariable String id) {
-        boolean deleted = recipeService.deleteRecipeById(id);
-        return deleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
-                       : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        recipeService.deleteRecipeById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Recipe> updateRecipe(@PathVariable String id, @RequestBody Recipe recipe) {
-        Optional<Recipe> updatedRecipe = recipeService.updateRecipe(id, recipe);
-        return updatedRecipe.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                            .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<RecipeDTO> updateRecipe(@PathVariable String id, @RequestBody RecipeDTO recipe) {
+        RecipeDTO updatedRecipe = recipeService.updateRecipe(id, recipe);
+        return new ResponseEntity<>(updatedRecipe, HttpStatus.OK);
     }
 
     @GetMapping("/search/tags")
-    public ResponseEntity<List<Recipe>> searchRecipesByTag(@RequestParam List<String> tags) {
-        List<Recipe> searchResults = recipeService.findRecipesByTags(tags);
+    public ResponseEntity<List<RecipeDTO>> searchRecipesByTag(@RequestParam List<String> tags) {
+        List<RecipeDTO> searchResults = recipeService.findRecipesByTags(tags);
         return new ResponseEntity<>(searchResults, HttpStatus.OK);
     }
 
     @GetMapping("/search/ingredients")
-    public ResponseEntity<List<Recipe>> searchRecipesByIngredient(@RequestParam List<String> ingredients) {
-        List<Recipe> searchResults = recipeService.findRecipesByIngredients(ingredients);
+    public ResponseEntity<List<RecipeDTO>> searchRecipesByIngredient(@RequestParam List<String> ingredients) {
+        List<RecipeDTO> searchResults = recipeService.findRecipesByIngredients(ingredients);
         return new ResponseEntity<>(searchResults, HttpStatus.OK);
     }
 

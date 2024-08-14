@@ -1,10 +1,11 @@
 package com.Abdo_Fahmi.Recipe_Bank.recipe;
 
+import com.Abdo_Fahmi.Recipe_Bank.exception.RecipeNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RecipeService {
@@ -12,44 +13,56 @@ public class RecipeService {
     private final RecipeRepository recipeRepo;
 
     @Autowired
-    public RecipeService(final RecipeRepository recipeRepo) {
+    public RecipeService(final RecipeRepository recipeRepo, RecipeMapper recipeMapper) {
         this.recipeRepo = recipeRepo;
     }
 
-    public Optional<Recipe> saveRecipe(Recipe recipe) {
-        if(recipeRepo.existsById(recipe.getId())) return Optional.empty();
-        Recipe savedRecipe = recipeRepo.save(recipe);
-        return Optional.of(savedRecipe);
+    public RecipeDTO saveRecipe(RecipeCreationDTO recipe) {
+        Recipe newRecipe = RecipeMapper.toEntity(recipe);
+        recipeRepo.save(newRecipe);
+
+        return RecipeMapper.toDTO(newRecipe);
     }
 
-    public boolean deleteRecipeById(String id) {
-        return recipeRepo.findById(id).map(recipe -> {
-            recipeRepo.delete(recipe);
-            return true;
-        }).orElse(false);
+    public void deleteRecipeById(String id) {
+        if(!recipeRepo.existsById(id)) throw new RecipeNotFoundException("Recipe not found");
+
+        recipeRepo.deleteById(id);
     }
 
-    public Optional<Recipe> updateRecipe(String id, Recipe recipe) {
-        return recipeRepo.findById(id).map(existingRecipe -> {
-            recipe.setId(id);
-            return recipeRepo.save(recipe);
-        });
+    public RecipeDTO updateRecipe(String id, RecipeDTO recipe) {
+        if(!recipeRepo.existsById(id)) throw new RecipeNotFoundException("Recipe not found");
+        Recipe updatedRecipe = RecipeMapper.toEntity(recipe);
+
+        return RecipeMapper.toDTO(updatedRecipe);
     }
 
-    public Optional<Recipe> findRecipeById(String id) {
-        return recipeRepo.findById(id);
+    public RecipeDTO findRecipeById(String id) {
+        Recipe foundRecipe = recipeRepo.findById(id)
+                                       .orElseThrow(() -> new RecipeNotFoundException("Recipe not found"));
+
+        return RecipeMapper.toDTO(foundRecipe);
     }
 
-    public List<Recipe> findRecipesByTags(List<String> tagList) {
-        return recipeRepo.findByTagsIn(tagList);
+    public List<RecipeDTO> findRecipesByTags(List<String> tagList) {
+        return recipeRepo.findByTagsIn(tagList)
+                         .stream()
+                         .map(RecipeMapper::toDTO)
+                         .collect(Collectors.toList());
     }
 
-    public List<Recipe> findRecipesByIngredients(List<String> ingredientList) {
-        return recipeRepo.findByIngredientsIn(ingredientList);
+    public List<RecipeDTO> findRecipesByIngredients(List<String> ingredientList) {
+        return recipeRepo.findByIngredientsIn(ingredientList)
+                .stream()
+                .map(RecipeMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Recipe> getAllRecipes() {
-        return recipeRepo.findAll();
+    public List<RecipeDTO> getAllRecipes() {
+        return recipeRepo.findAll()
+                         .stream()
+                         .map(RecipeMapper::toDTO)
+                         .collect(Collectors.toList());
     }
 
     public List<Recipe> findByOwnerId(String id) {

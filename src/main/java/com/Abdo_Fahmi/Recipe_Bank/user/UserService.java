@@ -10,12 +10,10 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepo;
-    private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepo, UserMapper userMapper, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepo, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
-        this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -31,7 +29,7 @@ public class UserService {
 
         newUser = userRepo.save(newUser);
 
-        return userMapper.toResponseDTO(newUser);
+        return UserMapper.toResponseDTO(newUser);
     }
 
     public void deleteUserById(String id) {
@@ -53,18 +51,18 @@ public class UserService {
 
         updatedUser = userRepo.save(updatedUser);
 
-        return userMapper.toResponseDTO(updatedUser);
+        return UserMapper.toResponseDTO(updatedUser);
     }
 
     public UserDTO findUserById(String userId) {
         User user = userRepo.findById(userId)
                             .orElseThrow(() -> new UserNotFoundException("User not found"));
-        return userMapper.toResponseDTO(user);
+        return UserMapper.toResponseDTO(user);
     }
 
     public UserDTO findUserByName(String name) {
         User user = userRepo.findById(name)
                             .orElseThrow(() -> new UserNotFoundException("User not found"));
-        return userMapper.toResponseDTO(user);
+        return UserMapper.toResponseDTO(user);
     }
 }

@@ -30,6 +30,11 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(RecipeNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleRecipeNotFoundException(UserNotFoundException e) {
+        return buildErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
     private ResponseEntity<ErrorResponseDTO> buildErrorResponse(String message, HttpStatus status) {
         ErrorResponseDTO errorResponseDTO = ErrorResponseDTO.builder()
                 .message(message)

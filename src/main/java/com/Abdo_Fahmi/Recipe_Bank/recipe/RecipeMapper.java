@@ -16,6 +16,17 @@ public class RecipeMapper {
                 .ownerId(entity.getOwnerId())
                 .build();
     }
+
+    public Recipe toEntity(RecipeCreationDTO dto) {
+        return Recipe.builder()
+                .name(dto.name())
+                .description(dto.description())
+                .tags(dto.tags())
+                .ingredients(dto.ingredients())
+                .ownerId(dto.ownerId())
+                .build();
+    }
+
     public Recipe toEntity(RecipeDTO dto) {
         return Recipe.builder()
                 .id(dto.id())
@@ -26,6 +37,4 @@ public class RecipeMapper {
                 .ownerId(dto.ownerId())
                 .build();
     }
-
-
 }

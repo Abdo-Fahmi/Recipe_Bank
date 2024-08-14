@@ -13,7 +13,7 @@ public class RecipeService {
     private final RecipeRepository recipeRepo;
 
     @Autowired
-    public RecipeService(final RecipeRepository recipeRepo, RecipeMapper recipeMapper) {
+    public RecipeService(final RecipeRepository recipeRepo) {
         this.recipeRepo = recipeRepo;
     }
 

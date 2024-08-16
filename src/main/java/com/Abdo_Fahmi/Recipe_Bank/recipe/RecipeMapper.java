@@ -3,7 +3,6 @@ package com.Abdo_Fahmi.Recipe_Bank.recipe;
 import lombok.experimental.UtilityClass;
 import org.springframework.stereotype.Component;
 
-@Component
 @UtilityClass
 public class RecipeMapper {
     public RecipeDTO toDTO(Recipe entity) {
@@ -17,7 +16,7 @@ public class RecipeMapper {
                 .build();
     }
 
-    public Recipe toEntity(RecipeCreationDTO dto) {
+    public Recipe toEntity(RecipeCreationRequest dto) {
         return Recipe.builder()
                 .name(dto.name())
                 .description(dto.description())

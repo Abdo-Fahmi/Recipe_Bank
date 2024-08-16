@@ -1,23 +1,18 @@
 package com.Abdo_Fahmi.Recipe_Bank.recipe;
 
 import com.Abdo_Fahmi.Recipe_Bank.exception.RecipeNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class RecipeService {
-
     private final RecipeRepository recipeRepo;
 
-    @Autowired
-    public RecipeService(final RecipeRepository recipeRepo) {
-        this.recipeRepo = recipeRepo;
-    }
-
-    public RecipeDTO saveRecipe(RecipeCreationDTO recipe) {
+    public RecipeDTO saveRecipe(RecipeCreationRequest recipe) {
         Recipe newRecipe = RecipeMapper.toEntity(recipe);
         recipeRepo.save(newRecipe);
 

@@ -1,6 +1,6 @@
 package com.Abdo_Fahmi.Recipe_Bank.recipe;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,13 +9,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/recipes")
+@RequiredArgsConstructor
 public class RecipeController {
     private final RecipeService recipeService;
-
-    @Autowired
-    public RecipeController(RecipeService recipeService) {
-        this.recipeService = recipeService;
-    }
 
     @GetMapping
     public ResponseEntity<List<RecipeDTO>> getAllRecipes() {
@@ -24,7 +20,7 @@ public class RecipeController {
     }
 
     @PostMapping
-    public ResponseEntity<RecipeDTO> createRecipe(@RequestBody RecipeCreationDTO recipe) {
+    public ResponseEntity<RecipeDTO> createRecipe(@RequestBody RecipeCreationRequest recipe) {
         RecipeDTO newRecipe = recipeService.saveRecipe(recipe);
         return new ResponseEntity<>(newRecipe, HttpStatus.CREATED);
     }

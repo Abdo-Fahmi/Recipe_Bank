@@ -1,9 +1,9 @@
-package com.Abdo_Fahmi.Recipe_Bank.user;
+package com.Abdo_Fahmi.Recipe_Bank.auth;
 
 import lombok.Builder;
 
 @Builder
-public record UserRegistrationDTO(
+public record RegisterRequest (
     String name,
     String email,
     String password

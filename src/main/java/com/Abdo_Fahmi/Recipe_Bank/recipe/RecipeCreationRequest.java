@@ -5,7 +5,7 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record RecipeCreationDTO(
+public record RecipeCreationRequest(
      String name,
      String description,
      List<String> tags,

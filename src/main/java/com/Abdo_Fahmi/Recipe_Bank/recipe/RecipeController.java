@@ -57,7 +57,6 @@ public class RecipeController {
         return new ResponseEntity<>(searchResults, HttpStatus.OK);
     }
 
-    // TODO findByOwnerId - after implementing CustomUserDetails
     @GetMapping("/my-recipes")
     public ResponseEntity<List<RecipeDTO>> getByOwnerId(@AuthenticationPrincipal UserPrincipal currentUser) {
         List<RecipeDTO> foundRecipes = recipeService.findByOwnerId(currentUser.getId());

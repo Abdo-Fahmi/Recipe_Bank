@@ -1,4 +1,4 @@
-package com.Abdo_Fahmi.Recipe_Bank.auth;
+package com.Abdo_Fahmi.Recipe_Bank.security.auth;
 
 import com.Abdo_Fahmi.Recipe_Bank.user.UserDTO;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService authService;
+
+    // TODO implement login functionality using authentication manager
 
     @PostMapping("/register")
     public ResponseEntity<UserDTO> registerUser(@RequestBody RegisterRequest user) {

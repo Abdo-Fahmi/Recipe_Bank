@@ -1,4 +1,4 @@
-package com.Abdo_Fahmi.Recipe_Bank.auth;
+package com.Abdo_Fahmi.Recipe_Bank.security.auth;
 
 import com.Abdo_Fahmi.Recipe_Bank.exception.EmailAlreadyInUseException;
 import com.Abdo_Fahmi.Recipe_Bank.exception.NameAlreadyInUseException;

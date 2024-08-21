@@ -1,8 +1,10 @@
 package com.Abdo_Fahmi.Recipe_Bank.user;
 
+import com.Abdo_Fahmi.Recipe_Bank.security.model.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,15 +19,17 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable String id, @RequestBody UserDTO user) {
-        UserDTO updatedUser = userService.updateUser(id, user);
+    @PatchMapping("/update-account")
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO user) {
+        UserPrincipal currentUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication();
+        UserDTO updatedUser = userService.updateUser(currentUser.getId(), user);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}/change-password")
-    public ResponseEntity<Void> changePassword(@PathVariable String id, @RequestBody PasswordChangeRequest passwordChangeRequest) {
-        userService.changePassword(id, passwordChangeRequest);
+    @PatchMapping("/update-account/change-password")
+    public ResponseEntity<Void> changePassword(@RequestBody PasswordChangeRequest passwordChangeRequest) {
+        UserPrincipal currentUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication();
+        userService.changePassword(currentUser.getId(), passwordChangeRequest);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 

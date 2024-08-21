@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @Document(collection = "users")
 public class User {
+    // TODO ADD AUTHORITIES
     @Id
     private String id;
     private String name;

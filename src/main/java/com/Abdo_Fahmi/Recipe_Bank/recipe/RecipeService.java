@@ -60,7 +60,10 @@ public class RecipeService {
                          .collect(Collectors.toList());
     }
 
-    public List<Recipe> findByOwnerId(String id) {
-        return recipeRepo.findByOwnerId(id);
+    public List<RecipeDTO> findByOwnerId(String id) {
+        return recipeRepo.findByOwnerId(id)
+                         .stream()
+                         .map(RecipeMapper::toDTO)
+                         .collect(Collectors.toList());
     }
 }

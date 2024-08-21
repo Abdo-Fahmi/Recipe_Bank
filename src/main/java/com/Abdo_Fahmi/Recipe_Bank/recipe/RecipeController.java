@@ -1,8 +1,10 @@
 package com.Abdo_Fahmi.Recipe_Bank.recipe;
 
+import com.Abdo_Fahmi.Recipe_Bank.security.model.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,4 +58,9 @@ public class RecipeController {
     }
 
     // TODO findByOwnerId - after implementing CustomUserDetails
+    @GetMapping("/my-recipes")
+    public ResponseEntity<List<RecipeDTO>> getByOwnerId(@AuthenticationPrincipal UserPrincipal currentUser) {
+        List<RecipeDTO> foundRecipes = recipeService.findByOwnerId(currentUser.getId());
+        return new ResponseEntity<>(foundRecipes, HttpStatus.FOUND);
+    }
 }

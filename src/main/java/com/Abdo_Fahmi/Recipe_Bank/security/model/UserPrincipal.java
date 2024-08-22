@@ -16,7 +16,7 @@ public class UserPrincipal implements UserDetails {
     private final String username;
     private final String email;
     private final String password;
-    private final Collection<? extends GrantedAuthority> authorities;
+    private final Collection<GrantedAuthority> authorities;
 
     // Used lombok getter to handle implemented methods
     ////////// PLACEHOLDERS /////////////

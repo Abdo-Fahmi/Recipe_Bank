@@ -9,7 +9,6 @@ import com.Abdo_Fahmi.Recipe_Bank.user.UserRepository;
 import com.Abdo_Fahmi.Recipe_Bank.user.role.ERole;
 import com.Abdo_Fahmi.Recipe_Bank.user.role.RoleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +32,7 @@ public class AuthenticationService {
                 .email(user.email())
                 .name(user.name())
                 .password(user.password())
-                .role(Collections.singleton(roleService.createRole(ERole.ROLE_USER)))
+                .roles(Collections.singleton(roleService.createRole(ERole.ROLE_USER)))
                 .build();
 
         newUser = userRepo.save(newUser);

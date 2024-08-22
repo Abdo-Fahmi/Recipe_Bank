@@ -13,13 +13,13 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public void deleteUserById(String id) {
-        if(!userRepo.existsById(id)) throw new UserNotFoundException("User doesn't exist");
+        if (!userRepo.existsById(id)) throw new UserNotFoundException("User doesn't exist");
         userRepo.deleteById(id);
     }
 
     public UserDTO updateUser(String id, UserDTO user) {
         User updatedUser = userRepo.findById(id)
-                                   .orElseThrow(() -> new UserNotFoundException("User doesn't exists"));
+                .orElseThrow(() -> new UserNotFoundException("User doesn't exists"));
 
         // Check if the name is already taken by another user
         // The first check is to make sure the name/email are different (being changed) before we check for duplicates
@@ -41,11 +41,11 @@ public class UserService {
 
     public void changePassword(String id, PasswordChangeRequest request) {
         User user = userRepo.findById(id)
-                            .orElseThrow(() -> new UserNotFoundException("User doesn't exists"));
+                .orElseThrow(() -> new UserNotFoundException("User doesn't exists"));
 
-        if(!passwordEncoder.matches(request.oldPassword(),(user.getPassword())))
+        if (!passwordEncoder.matches(request.oldPassword(), (user.getPassword())))
             throw new IncorrectCredentialsException("Incorrect password");
-        if (!passwordEncoder.matches(request.newPassword(),(request.repeatPassword())))
+        if (!passwordEncoder.matches(request.newPassword(), (request.repeatPassword())))
             throw new PasswordsDoNotMatchException("Password are not the same");
 
         user.setPassword(passwordEncoder.encode(request.newPassword()));
@@ -55,13 +55,13 @@ public class UserService {
 
     public UserDTO findUserById(String userId) {
         User user = userRepo.findById(userId)
-                            .orElseThrow(() -> new UserNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
         return UserMapper.toResponseDTO(user);
     }
 
     public UserDTO findUserByName(String name) {
         User user = userRepo.findByName(name)
-                            .orElseThrow(() -> new UserNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
         return UserMapper.toResponseDTO(user);
     }
 }

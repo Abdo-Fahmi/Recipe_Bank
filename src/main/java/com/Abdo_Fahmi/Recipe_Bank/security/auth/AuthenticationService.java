@@ -31,7 +31,7 @@ public class AuthenticationService {
         User newUser = User.builder()
                 .email(user.email())
                 .name(user.name())
-                .password(user.password())
+                .password(passwordEncoder.encode(user.password()))
                 .roles(Collections.singleton(roleService.createRole(ERole.ROLE_USER)))
                 .build();
 

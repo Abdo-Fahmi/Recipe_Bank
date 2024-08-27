@@ -16,9 +16,14 @@ public class AuthenticationController {
     private final AuthenticationService authService;
 
     // TODO implement login functionality using authentication manager
+    @PostMapping("/login")
+    public ResponseEntity<JwtResponse> login(@RequestBody LoginRequest loginRequest) {
+        JwtResponse response = authService.validateUser(loginRequest);
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+    }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> registerUser(@RequestBody RegisterRequest user) {
+    public ResponseEntity<UserDTO> register(@RequestBody RegisterRequest user) {
         UserDTO userDTO = authService.registerUser(user);
         return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }

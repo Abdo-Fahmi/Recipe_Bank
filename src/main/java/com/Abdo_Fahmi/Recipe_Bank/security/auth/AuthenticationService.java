@@ -4,8 +4,6 @@ import com.Abdo_Fahmi.Recipe_Bank.exception.EmailAlreadyInUseException;
 import com.Abdo_Fahmi.Recipe_Bank.exception.NameAlreadyInUseException;
 import com.Abdo_Fahmi.Recipe_Bank.security.jwt.JwtUtil;
 import com.Abdo_Fahmi.Recipe_Bank.user.User;
-import com.Abdo_Fahmi.Recipe_Bank.user.UserDTO;
-import com.Abdo_Fahmi.Recipe_Bank.user.UserMapper;
 import com.Abdo_Fahmi.Recipe_Bank.user.UserRepository;
 import com.Abdo_Fahmi.Recipe_Bank.user.role.ERole;
 import com.Abdo_Fahmi.Recipe_Bank.user.role.RoleService;
@@ -28,8 +26,7 @@ public class AuthenticationService {
     private final RoleService roleService;
     private final JwtUtil jwtUtil;
 
-    // TODO Change response from user DTO to JwtResponse
-    public UserDTO registerUser(RegisterRequest user) {
+    public JwtResponse registerUser(RegisterRequest user) {
         if (userRepo.existsByName(user.name()))
             throw new NameAlreadyInUseException("Name is already taken by another user");
         if (userRepo.existsByEmail(user.email()))
@@ -46,7 +43,11 @@ public class AuthenticationService {
 
         newUser = userRepo.save(newUser);
 
-        return UserMapper.toResponseDTO(newUser);
+        String jwt = jwtUtil.generateToken(newUser.getName());
+
+        return JwtResponse.builder()
+                .token(jwt)
+                .build();
     }
 
     public JwtResponse validateUser(LoginRequest loginRequest) {

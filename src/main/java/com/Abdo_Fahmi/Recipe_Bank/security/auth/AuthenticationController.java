@@ -1,6 +1,5 @@
 package com.Abdo_Fahmi.Recipe_Bank.security.auth;
 
-import com.Abdo_Fahmi.Recipe_Bank.user.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +22,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> register(@RequestBody RegisterRequest user) {
-        UserDTO userDTO = authService.registerUser(user);
-        return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
+    public ResponseEntity<JwtResponse> register(@RequestBody RegisterRequest user) {
+        JwtResponse jwtResponse = authService.registerUser(user);
+        return new ResponseEntity<>(jwtResponse, HttpStatus.CREATED);
     }
 }

@@ -1,7 +1,6 @@
 package com.Abdo_Fahmi.Recipe_Bank.security.jwt;
 
 import io.jsonwebtoken.Jwts;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +25,7 @@ public class JwtUtil {
                 .add(claims)
                 .subject(name)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 60))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 60))
                 .and()
                 .signWith(new SecretKeySpec(jwtSecretKey.getBytes(), "HmacSHA256")) // unsure about this way of signing the key, best one I found
                 .compact();

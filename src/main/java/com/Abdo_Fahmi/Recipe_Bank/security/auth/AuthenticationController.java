@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
     private final AuthenticationService authService;
 
-    // TODO implement login functionality using authentication manager
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody LoginRequest loginRequest) {
         JwtResponse response = authService.validateUser(loginRequest);
@@ -23,7 +22,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<JwtResponse> register(@RequestBody RegisterRequest user) {
-        JwtResponse jwtResponse = authService.registerUser(user);
-        return new ResponseEntity<>(jwtResponse, HttpStatus.CREATED);
+        JwtResponse response = authService.registerUser(user);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

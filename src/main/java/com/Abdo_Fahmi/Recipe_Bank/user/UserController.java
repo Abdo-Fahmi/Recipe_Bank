@@ -4,6 +4,7 @@ import com.Abdo_Fahmi.Recipe_Bank.security.model.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,26 +22,34 @@ public class UserController {
 
     @PatchMapping("/update-account")
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO user) {
-        UserPrincipal currentUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication();
+        // Retrieving authentication from the context
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Fetching data of the currently authenticated user
+        UserPrincipal currentUser = (UserPrincipal) authentication.getPrincipal();
+
         UserDTO updatedUser = userService.updateUser(currentUser.getId(), user);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     @PatchMapping("/update-account/change-password")
     public ResponseEntity<Void> changePassword(@RequestBody PasswordChangeRequest passwordChangeRequest) {
-        UserPrincipal currentUser = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication();
+        // Redundant, but making the currentUser a class variable but that may be a security vulnerability
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal currentUser = (UserPrincipal) authentication.getPrincipal();
+
         userService.changePassword(currentUser.getId(), passwordChangeRequest);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/search/{id}")
     public ResponseEntity<UserDTO> findUserById(@PathVariable String id) {
         UserDTO foundUserDTO = userService.findUserById(id);
         return new ResponseEntity<>(foundUserDTO, HttpStatus.FOUND);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<UserDTO> findUserByName(@RequestParam String name) {
+    @GetMapping("/search/{name}")
+    public ResponseEntity<UserDTO> findUserByName(@PathVariable String name) {
         UserDTO foundUserDTO = userService.findUserByName(name);
         return new ResponseEntity<>(foundUserDTO, HttpStatus.FOUND);
     }

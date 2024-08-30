@@ -43,13 +43,16 @@ public class UserService {
         User user = userRepo.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User doesn't exists"));
 
+        // Checking if the old password is correct
         if (!passwordEncoder.matches(request.oldPassword(), (user.getPassword())))
             throw new IncorrectCredentialsException("Incorrect password");
-        if (!passwordEncoder.matches(request.newPassword(), (request.repeatPassword())))
+
+        // Checking if the password was repeated properly
+        if (!request.newPassword().equals(request.repeatPassword()))
             throw new PasswordsDoNotMatchException("Password are not the same");
 
+        // Set new password and save new user info
         user.setPassword(passwordEncoder.encode(request.newPassword()));
-
         userRepo.save(user);
     }
 

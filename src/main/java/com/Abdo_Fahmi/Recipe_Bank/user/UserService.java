@@ -1,15 +1,24 @@
 package com.Abdo_Fahmi.Recipe_Bank.user;
 
 import com.Abdo_Fahmi.Recipe_Bank.exception.*;
+import com.Abdo_Fahmi.Recipe_Bank.recipe.Recipe;
+import com.Abdo_Fahmi.Recipe_Bank.recipe.RecipeDTO;
+import com.Abdo_Fahmi.Recipe_Bank.recipe.RecipeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepo;
+    private final RecipeRepository recipeRepo;
     private final PasswordEncoder passwordEncoder;
 
     public void deleteUserById(String id) {
@@ -66,5 +75,49 @@ public class UserService {
         User user = userRepo.findByName(name)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         return UserMapper.toResponseDTO(user);
+    }
+
+    public boolean addRecipeToFavorites(String id, String recipeId) {
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        // Checking that the chosen recipe exists.
+        Recipe recipe = recipeRepo.findById(recipeId)
+                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found"));
+
+        // Checking if teh list is null, in case this is the first favorite.
+        // NOTE maybe it is better to initialize a set in teh user entity itself rather than checking and initializing here
+        if(user.getFavorites() == null) user.setFavorites(new HashSet<>());
+
+        // We don't check for duplicates since we are using a set to store the favored recipe IDs
+        user.getFavorites().add(recipeId);
+        userRepo.save(user);
+        return true;
+    }
+
+    public Set<String> getUserFavorites(String id) {
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        return user.getFavorites();
+    }
+
+    public boolean deleteRecipeFromFavorites(String id, String recipeId) {
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        // Checking if the list is empty
+        if(user.getFavorites() == null) user.setFavorites(new HashSet<>());
+
+        // Checking that the chosen recipe exists.
+        Recipe recipe = recipeRepo.findById(recipeId)
+                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found"));
+
+        // Checking if the provided id is in the user's favorites
+        if(!user.getFavorites().contains(recipeId)) return false;
+
+        // We don't check for duplicates since we are using a set to store the favored recipe IDs
+        user.getFavorites().remove(recipeId);
+        userRepo.save(user);
+        return true;
     }
 }

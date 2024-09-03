@@ -1,4 +1,4 @@
-package com.Abdo_Fahmi.Recipe_Bank.recipe;
+package com.Abdo_Fahmi.Recipe_Bank.recipe.Ingredient;
 
 
 import lombok.Getter;

@@ -2,9 +2,12 @@ package com.Abdo_Fahmi.Recipe_Bank.recipe;
 
 import com.Abdo_Fahmi.Recipe_Bank.exception.RecipeNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -12,58 +15,77 @@ import java.util.stream.Collectors;
 public class RecipeService {
     private final RecipeRepository recipeRepo;
 
-    public RecipeDTO saveRecipe(RecipeCreationRequest recipe) {
+    public RecipeDTO saveRecipe(String id, RecipeCreationRequest recipe) {
+        System.out.println(recipe);
         Recipe newRecipe = RecipeMapper.toEntity(recipe);
-        recipeRepo.save(newRecipe);
+        newRecipe.setOwnerId(id);
 
+        System.out.println(newRecipe);
+        recipeRepo.save(newRecipe);
         return RecipeMapper.toDTO(newRecipe);
     }
 
-    public void deleteRecipeById(String id) {
-        if(!recipeRepo.existsById(id)) throw new RecipeNotFoundException("Recipe not found");
+    public void deleteRecipeById(String id, String currentUserId) {
+        Recipe recipe = recipeRepo.findById(id)
+                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found"));
 
+        // Check is the logged-in user has authorization to delete this recipe.
+        if (!recipe.getOwnerId().equals(currentUserId)) throw new AccessDeniedException("User doesn't have authorization for this action");
         recipeRepo.deleteById(id);
     }
 
-    public RecipeDTO updateRecipe(String id, RecipeDTO recipe) {
-        if(!recipeRepo.existsById(id)) throw new RecipeNotFoundException("Recipe not found");
-        Recipe updatedRecipe = RecipeMapper.toEntity(recipe);
+    public RecipeDTO updateRecipe(String id, RecipeDTO recipeDTO, String currentUserId) {
+        Recipe recipe = recipeRepo.findById(id)
+                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found"));
 
+        // Check is the logged-in user has authorization to delete this recipe.
+        if (!recipe.getOwnerId().equals(currentUserId)) throw new AccessDeniedException("User doesn't have authorization for this action");
+        Recipe updatedRecipe = RecipeMapper.toEntity(recipeDTO);
+
+        recipeRepo.save(updatedRecipe);
         return RecipeMapper.toDTO(updatedRecipe);
     }
 
     public RecipeDTO findRecipeById(String id) {
         Recipe foundRecipe = recipeRepo.findById(id)
-                                       .orElseThrow(() -> new RecipeNotFoundException("Recipe not found"));
+                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found"));
 
         return RecipeMapper.toDTO(foundRecipe);
     }
 
-    public List<RecipeDTO> findRecipesByTags(List<String> tagList) {
+    // TODO adjust the search methods to take visibility into account
+    public List<RecipeProxyDTO> findRecipesByTags(List<String> tagList) {
         return recipeRepo.findByTagsIn(tagList)
-                         .stream()
-                         .map(RecipeMapper::toDTO)
-                         .collect(Collectors.toList());
-    }
-
-    public List<RecipeDTO> findRecipesByIngredients(List<String> ingredientList) {
-        return recipeRepo.findByIngredientsIn(ingredientList)
                 .stream()
-                .map(RecipeMapper::toDTO)
+                .map(RecipeMapper::toProxyDTO)
                 .collect(Collectors.toList());
     }
 
-    public List<RecipeDTO> getAllRecipes() {
-        return recipeRepo.findAll()
-                         .stream()
-                         .map(RecipeMapper::toDTO)
-                         .collect(Collectors.toList());
+    public List<RecipeProxyDTO> findRecipesByIngredients(List<String> ingredientList) {
+        return recipeRepo.findByIngredientsIn(ingredientList)
+                .stream()
+                .map(RecipeMapper::toProxyDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<RecipeDTO> findByOwnerId(String id) {
+    public List<RecipeProxyDTO> getAllRecipes() {
+        return recipeRepo.findAll()
+                .stream()
+                .map(RecipeMapper::toProxyDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<RecipeProxyDTO> findByOwnerId(String id) {
         return recipeRepo.findByOwnerId(id)
-                         .stream()
-                         .map(RecipeMapper::toDTO)
-                         .collect(Collectors.toList());
+                .stream()
+                .map(RecipeMapper::toProxyDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<RecipeProxyDTO> getRecipesById(Set<String> favoritesIDs) {
+        return recipeRepo.findAllById(favoritesIDs)
+                .stream()
+                .map(RecipeMapper::toProxyDTO)
+                .collect(Collectors.toList());
     }
 }

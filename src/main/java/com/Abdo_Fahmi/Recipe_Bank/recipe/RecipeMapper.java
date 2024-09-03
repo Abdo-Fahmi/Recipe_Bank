@@ -1,7 +1,6 @@
 package com.Abdo_Fahmi.Recipe_Bank.recipe;
 
 import lombok.experimental.UtilityClass;
-import org.springframework.stereotype.Component;
 
 @UtilityClass
 public class RecipeMapper {
@@ -10,9 +9,19 @@ public class RecipeMapper {
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
+                .instructions(entity.getInstructions())
                 .tags(entity.getTags())
                 .ingredients(entity.getIngredients())
                 .ownerId(entity.getOwnerId())
+                .isPublic(entity.isPublic())
+                .build();
+    }
+
+    public RecipeProxyDTO toProxyDTO(Recipe entity) {
+        return RecipeProxyDTO.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .description(entity.getDescription())
                 .build();
     }
 
@@ -20,9 +29,10 @@ public class RecipeMapper {
         return Recipe.builder()
                 .name(dto.name())
                 .description(dto.description())
+                .instructions(dto.instructions())
                 .tags(dto.tags())
                 .ingredients(dto.ingredients())
-                .ownerId(dto.ownerId())
+                .isPublic(dto.isPublic())
                 .build();
     }
 
@@ -31,9 +41,11 @@ public class RecipeMapper {
                 .id(dto.id())
                 .name(dto.name())
                 .description(dto.description())
+                .instructions(dto.instructions())
                 .tags(dto.tags())
                 .ingredients(dto.ingredients())
                 .ownerId(dto.ownerId())
+                .isPublic(dto.isPublic())
                 .build();
     }
 }

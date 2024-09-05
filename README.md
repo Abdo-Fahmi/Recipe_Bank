@@ -20,4 +20,4 @@ This is a Spring Boot application that manages food recipes. Each recipe contain
 - Docker and MongoDB
 - Mongo Express for database management
 
-### Note: This app is still in progress, once the backend is finsihed and tested properly, I will be moving onto the frontend.
+### Note: This app is still in progress, will add more details once the backend and forntend are more robust.

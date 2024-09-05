@@ -1,16 +1,12 @@
 package com.Abdo_Fahmi.Recipe_Bank.user;
 
 import com.Abdo_Fahmi.Recipe_Bank.exception.*;
-import com.Abdo_Fahmi.Recipe_Bank.recipe.Recipe;
-import com.Abdo_Fahmi.Recipe_Bank.recipe.RecipeDTO;
 import com.Abdo_Fahmi.Recipe_Bank.recipe.RecipeRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -82,11 +78,10 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         // Checking that the chosen recipe exists.
-        Recipe recipe = recipeRepo.findById(recipeId)
-                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found"));
+        if (!recipeRepo.existsById(recipeId)) throw new RecipeNotFoundException("Recipe not found");
 
-        // Checking if teh list is null, in case this is the first favorite.
-        // NOTE maybe it is better to initialize a set in teh user entity itself rather than checking and initializing here
+        // Checking if the list is null, in case this is the first favorite.
+        // NOTE maybe it is better to initialize a set in teh user entity itself rather than checking and initializing here.
         if(user.getFavorites() == null) user.setFavorites(new HashSet<>());
 
         // We don't check for duplicates since we are using a set to store the favored recipe IDs
@@ -109,8 +104,7 @@ public class UserService {
         if(user.getFavorites() == null) user.setFavorites(new HashSet<>());
 
         // Checking that the chosen recipe exists.
-        Recipe recipe = recipeRepo.findById(recipeId)
-                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found"));
+        if (!recipeRepo.existsById(recipeId)) throw new RecipeNotFoundException("Recipe not found");
 
         // Checking if the provided id is in the user's favorites
         if(!user.getFavorites().contains(recipeId)) return false;

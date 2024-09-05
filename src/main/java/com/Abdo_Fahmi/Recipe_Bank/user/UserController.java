@@ -1,6 +1,5 @@
 package com.Abdo_Fahmi.Recipe_Bank.user;
 
-import com.Abdo_Fahmi.Recipe_Bank.recipe.RecipeDTO;
 import com.Abdo_Fahmi.Recipe_Bank.recipe.RecipeProxyDTO;
 import com.Abdo_Fahmi.Recipe_Bank.recipe.RecipeService;
 import com.Abdo_Fahmi.Recipe_Bank.security.model.UserPrincipal;

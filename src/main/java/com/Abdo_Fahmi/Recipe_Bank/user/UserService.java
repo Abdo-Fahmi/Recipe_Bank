@@ -50,7 +50,7 @@ public class UserService {
 
         // Checking if the old password is correct
         if (!passwordEncoder.matches(request.oldPassword(), (user.getPassword())))
-            throw new IncorrectCredentialsException("Incorrect password");
+            throw new InvalidCredentialsException("Incorrect password");
 
         // Checking if the password was repeated properly
         if (!request.newPassword().equals(request.repeatPassword()))
@@ -73,7 +73,7 @@ public class UserService {
         return UserMapper.toResponseDTO(user);
     }
 
-    public boolean addRecipeToFavorites(String id, String recipeId) {
+    public void addRecipeToFavorites(String id, String recipeId) {
         User user = userRepo.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
@@ -81,13 +81,12 @@ public class UserService {
         if (!recipeRepo.existsById(recipeId)) throw new RecipeNotFoundException("Recipe not found");
 
         // Checking if the list is null, in case this is the first favorite.
-        // NOTE maybe it is better to initialize a set in teh user entity itself rather than checking and initializing here.
+        // NOTE maybe it is better to initialize a set in the user entity itself rather than checking and initializing here.
         if(user.getFavorites() == null) user.setFavorites(new HashSet<>());
 
         // We don't check for duplicates since we are using a set to store the favored recipe IDs
         user.getFavorites().add(recipeId);
         userRepo.save(user);
-        return true;
     }
 
     public Set<String> getUserFavorites(String id) {
@@ -96,7 +95,7 @@ public class UserService {
         return user.getFavorites();
     }
 
-    public boolean deleteRecipeFromFavorites(String id, String recipeId) {
+    public void deleteRecipeFromFavorites(String id, String recipeId) {
         User user = userRepo.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
@@ -104,14 +103,13 @@ public class UserService {
         if(user.getFavorites() == null) user.setFavorites(new HashSet<>());
 
         // Checking that the chosen recipe exists.
-        if (!recipeRepo.existsById(recipeId)) throw new RecipeNotFoundException("Recipe not found");
+        if (!recipeRepo.existsById(recipeId)) throw new RecipeNotFoundException("Recipe does not exists");
 
         // Checking if the provided id is in the user's favorites
-        if(!user.getFavorites().contains(recipeId)) return false;
+        if(!user.getFavorites().contains(recipeId)) throw new RecipeNotFoundException("Recipe is not in favorites");
 
         // We don't check for duplicates since we are using a set to store the favored recipe IDs
         user.getFavorites().remove(recipeId);
         userRepo.save(user);
-        return true;
     }
 }

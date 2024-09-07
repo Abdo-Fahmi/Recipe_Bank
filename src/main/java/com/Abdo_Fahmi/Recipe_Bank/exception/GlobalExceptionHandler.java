@@ -20,12 +20,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(PasswordsDoNotMatchException.class)
-    public ResponseEntity<ErrorResponseDTO> handlePasswordDoesNotMatchException(Exception e) {
+    public ResponseEntity<ErrorResponseDTO> handlePasswordDoesNotMatchException(PasswordsDoNotMatchException e) {
         return buildErrorResponse(e.getMessage(), HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(IncorrectCredentialsException.class)
-    public ResponseEntity<ErrorResponseDTO> handleIncorrectCredentials(Exception e) {
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidCredentials(InvalidCredentialsException e) {
         return buildErrorResponse(e.getMessage(), HttpStatus.CONFLICT);
     }
 
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(RecipeNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handleRecipeNotFoundException(UserNotFoundException e) {
+    public ResponseEntity<ErrorResponseDTO> handleRecipeNotFoundException(RecipeNotFoundException e) {
         return buildErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 

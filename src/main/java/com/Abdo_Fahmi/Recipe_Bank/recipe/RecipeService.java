@@ -15,11 +15,9 @@ public class RecipeService {
     private final RecipeRepository recipeRepo;
 
     public RecipeDTO saveRecipe(String id, RecipeCreationRequest recipe) {
-        System.out.println(recipe);
         Recipe newRecipe = RecipeMapper.toEntity(recipe);
         newRecipe.setOwnerId(id);
 
-        System.out.println(newRecipe);
         recipeRepo.save(newRecipe);
         return RecipeMapper.toDTO(newRecipe);
     }
@@ -29,7 +27,7 @@ public class RecipeService {
                 .orElseThrow(() -> new RecipeNotFoundException("Recipe not found"));
 
         // Check is the logged-in user has authorization to delete this recipe.
-        if (!recipe.getOwnerId().equals(currentUserId)) throw new AccessDeniedException("User doesn't have authorization for this action");
+        if (!recipe.getOwnerId().equals(currentUserId)) throw new AccessDeniedException("User is not authorized for this action");
         recipeRepo.deleteById(id);
     }
 
@@ -38,7 +36,7 @@ public class RecipeService {
                 .orElseThrow(() -> new RecipeNotFoundException("Recipe not found"));
 
         // Check is the logged-in user has authorization to delete this recipe.
-        if (!recipe.getOwnerId().equals(currentUserId)) throw new AccessDeniedException("User doesn't have authorization for this action");
+        if (!recipe.getOwnerId().equals(currentUserId)) throw new AccessDeniedException("User is not authorized for this action");
         Recipe updatedRecipe = RecipeMapper.toEntity(recipeDTO);
 
         recipeRepo.save(updatedRecipe);

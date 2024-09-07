@@ -59,18 +59,14 @@ public class UserController {
 
     @PostMapping("/my-favorites/{recipeId}")
     public ResponseEntity<Void> addRecipeToFavorites(@PathVariable String recipeId, @AuthenticationPrincipal UserPrincipal currentUser) {
-        if (userService.addRecipeToFavorites(currentUser.getId(), recipeId))
-            return new ResponseEntity<>(HttpStatus.OK);
-
-        return new ResponseEntity<>(HttpStatus.CONFLICT);
+        userService.addRecipeToFavorites(currentUser.getId(), recipeId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/my-favorites/{recipeId}")
     public ResponseEntity<Void> deleteRecipeFromFavorites(@PathVariable String recipeId, @AuthenticationPrincipal UserPrincipal currentUser) {
-        if (userService.deleteRecipeFromFavorites(currentUser.getId(), recipeId))
-            return new ResponseEntity<>(HttpStatus.OK);
-
-        return new ResponseEntity<>(HttpStatus.CONFLICT);
+        userService.deleteRecipeFromFavorites(currentUser.getId(), recipeId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/my-favorites")

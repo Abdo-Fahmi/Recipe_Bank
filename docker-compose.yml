@@ -5,8 +5,8 @@ services:
         ports:
             - 27017:27017
         environment:
-            MONGO_INITDB_ROOT_USERNAME: ${spring.data.mongodb.username}
-            MONGO_INITDB_ROOT_PASSWORD: ${spring.data.mongodb.password}
+            MONGO_INITDB_ROOT_USERNAME: ${DB_USERNAME}
+            MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
         networks:
             - app-network
         volumes:
@@ -20,8 +20,8 @@ services:
         ports:
             - 8081:8081
         environment:
-            ME_CONFIG_MONGODB_ADMINUSERNAME: ${spring.data.mongodb.password}
-            ME_CONFIG_MONGODB_ADMINPASSWORD: ${spring.data.mongodb.password}
+            ME_CONFIG_MONGODB_ADMINUSERNAME: ${DB_USERNAME}
+            ME_CONFIG_MONGODB_ADMINPASSWORD: ${DB_PASSWORD}
             ME_CONFIG_MONGODB_PORT: 27017
             ME_CONFIG_MONGODB_SERVER: mongodb
             ME_CONFIG_MONGODB_URL: mongodb://mongodb:27017
@@ -39,7 +39,7 @@ services:
         ports:
             - 8080:8080
         environment:
-            SPRING_DATA_MONGODB_URI: ${spring.data.mongodb.uri}
+            SPRING_DATA_MONGODB_URI: mongodb://${DB_USERNAME}:${DB_PASSWORD}@mongodb:27017/${DB_NAME}?authSource=admin
         networks:
             - app-network
 
@@ -49,3 +49,5 @@ volumes:
 networks:
     app-network:
         driver: bridge
+
+

@@ -1,9 +1,0 @@
-spring:
-    data:
-        mongodb:
-            user: abdofahmi
-            password: password
-            uri: mongodb://abdofahmi:password@mongodb:27017/recipes_db?authSource=admin
-
-server:
-    port: 8080

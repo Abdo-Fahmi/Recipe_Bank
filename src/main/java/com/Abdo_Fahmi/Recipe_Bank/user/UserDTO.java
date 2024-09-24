@@ -9,8 +9,8 @@ import java.util.Set;
 // Also used for updating user information (excluding password change which will have its own DTO
 @Builder
 public record UserDTO(
-        String id,
-        String name,
-        String email,
-        Set<Role> role
+    String id,
+    String name,
+    String email,
+    Set<Role> role
 ) { }

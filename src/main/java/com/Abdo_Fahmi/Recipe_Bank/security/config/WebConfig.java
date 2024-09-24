@@ -30,15 +30,15 @@ public class WebConfig {
         corsConfig.setAllowCredentials(true);
         corsConfig.addAllowedOrigin("http://localhost:5500");
         corsConfig.setAllowedHeaders(Arrays.asList(
-                HttpHeaders.AUTHORIZATION,
-                HttpHeaders.CONTENT_TYPE,
-                HttpHeaders.ACCEPT));
+            HttpHeaders.AUTHORIZATION,
+            HttpHeaders.CONTENT_TYPE,
+            HttpHeaders.ACCEPT));
         corsConfig.setAllowedMethods(Arrays.asList(
-                HttpMethod.GET.name(),
-                HttpMethod.POST.name(),
-                HttpMethod.PATCH.name(),
-                HttpMethod.PUT.name(),
-                HttpMethod.DELETE.name()));
+            HttpMethod.GET.name(),
+            HttpMethod.POST.name(),
+            HttpMethod.PATCH.name(),
+            HttpMethod.PUT.name(),
+            HttpMethod.DELETE.name()));
         return corsConfig;
     }
 }

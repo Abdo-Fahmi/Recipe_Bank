@@ -1,0 +1,16 @@
+spring:
+    data:
+        mongodb:
+            user: abdofahmi
+            password: password
+            uri: mongodb://abdofahmi:password@mongodb:27017/recipes_db?authSource=admin
+
+server:
+    port: 8080
+
+application:
+    security:
+        JWT:
+            secret-key: CADE2F9FD0BBEB4B9E988E960D1D1C4C0DB5B1097394410BB11B7925B2C531457A89BB335DB5B53322B7C756EB40407D2EDA48A61D85853391E82939C56E5807
+            access-expiry:
+            refresh-expiry:

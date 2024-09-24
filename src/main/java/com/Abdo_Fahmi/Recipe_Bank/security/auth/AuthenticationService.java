@@ -26,7 +26,11 @@ public class AuthenticationService {
     private final RoleService roleService;
     private final JwtUtil jwtUtil;
 
-    public JwtResponse registerUser(RegisterRequest user) {
+
+    private final long accessTokenTTL = 15 * 60 * 1000; // 15 min
+    private final long refreshTokenTTL = 10 * 24 * 60 * 60 * 1000; // 10 days
+
+    public void registerUser(RegisterRequest user) {
         if (userRepo.existsByName(user.name()))
             throw new NameAlreadyInUseException("Name is already taken by another user");
         if (userRepo.existsByEmail(user.email()))
@@ -41,13 +45,7 @@ public class AuthenticationService {
                 .roles(Collections.singleton(roleService.createRole(ERole.ROLE_USER)))
                 .build();
 
-        newUser = userRepo.save(newUser);
-
-        String jwt = jwtUtil.generateToken(newUser.getName());
-
-        return JwtResponse.builder()
-                .token(jwt)
-                .build();
+        userRepo.save(newUser);
     }
 
     public JwtResponse validateUser(LoginRequest loginRequest) {
@@ -59,10 +57,14 @@ public class AuthenticationService {
                 );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtil.generateToken(loginRequest.name());
+
+        // Generating a new pair of access/refresh token on new login
+        String accessToken = jwtUtil.generateToken(loginRequest.name(), accessTokenTTL);
+        String refreshToken = jwtUtil.generateToken(loginRequest.name(), refreshTokenTTL);
 
         return JwtResponse.builder()
-                .token(jwt)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 }

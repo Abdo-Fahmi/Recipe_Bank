@@ -16,12 +16,13 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
     // Will be using a symmetric key for token generation for now
-    // An asymmetric approach (generating a private/public pair using openssl) is naturally more secure
+    // An asymmetric approach (generating a private/public pair using openssl)
+    // is naturally more secure
     // Might implement that in the future
-    @Value("${JWT_KEY}")
+    @Value("${JWT.key}")
     private String jwtSecretKey;
 
-    public String generateToken(String name) {
+    public String generateToken(String name, long expiryDate) {
         Map<String, Object> claims = new HashMap<>();
 
         return Jwts.builder()
@@ -29,14 +30,14 @@ public class JwtUtil {
                 .add(claims)
                 .subject(name)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 60))
+                .expiration(new Date(System.currentTimeMillis() + expiryDate))
                 .and()
                 .signWith(getKey())
                 .compact();
     }
 
     private SecretKey getKey() {
-        // unsure about this way of signing the key, but it works
+        // their may be better ways to do this but this is sufficient.
         return new SecretKeySpec(jwtSecretKey.getBytes(), "HmacSHA256");
     }
 
@@ -50,7 +51,7 @@ public class JwtUtil {
     }
 
     private Date extractExpirationDate(String token) {
-       return extractClaims(token, Claims::getExpiration);
+        return extractClaims(token, Claims::getExpiration);
     }
 
     private boolean isTokenExpired(String token) {

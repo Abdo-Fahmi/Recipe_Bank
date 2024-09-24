@@ -22,7 +22,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<JwtResponse> register(@RequestBody RegisterRequest user) {
-        JwtResponse response = authService.registerUser(user);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        authService.registerUser(user);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

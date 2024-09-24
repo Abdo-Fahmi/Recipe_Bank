@@ -11,9 +11,10 @@ import java.util.Date;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException ex) {
-        return new ResponseEntity<>("Access Denied: " + ex.getMessage(), HttpStatus.FORBIDDEN);
+    public ResponseEntity<ErrorResponseDTO> handleAccessDeniedException(AccessDeniedException e) {
+        return buildErrorResponse("Access Denied: " + e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDTO> handleGeneralException(Exception e) {
         return buildErrorResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

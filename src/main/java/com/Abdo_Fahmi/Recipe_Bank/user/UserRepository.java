@@ -1,11 +1,13 @@
 package com.Abdo_Fahmi.Recipe_Bank.user;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public interface UserRepository extends MongoRepository<User, String> {
     boolean existsByEmail(String email);
-    boolean existsByName(String name);
-    Optional<User> findByName(String name);
+    boolean existsByUsername(String name);
+    Optional<User> findByUsername(String username);
 }

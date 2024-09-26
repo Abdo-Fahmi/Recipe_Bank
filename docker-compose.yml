@@ -5,8 +5,8 @@ services:
         ports:
             - 27017:27017
         environment:
-            MONGO_INITDB_ROOT_USERNAME: ${DB_USERNAME}
-            MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
+            MONGO_INITDB_ROOT_USERNAME: ${spring_data_mongo_username}
+            MONGO_INITDB_ROOT_PASSWORD: ${spring_data_mongo_password}
         networks:
             - app-network
         volumes:
@@ -20,8 +20,8 @@ services:
         ports:
             - 8081:8081
         environment:
-            ME_CONFIG_MONGODB_ADMINUSERNAME: ${DB_USERNAME}
-            ME_CONFIG_MONGODB_ADMINPASSWORD: ${DB_PASSWORD}
+            ME_CONFIG_MONGODB_ADMINUSERNAME: ${spring_data_mongo_username}
+            ME_CONFIG_MONGODB_ADMINPASSWORD: ${spring_data_mongo_password}
             ME_CONFIG_MONGODB_PORT: 27017
             ME_CONFIG_MONGODB_SERVER: mongodb
             ME_CONFIG_MONGODB_URL: mongodb://mongodb:27017
@@ -39,7 +39,7 @@ services:
         ports:
             - 8080:8080
         environment:
-            SPRING_DATA_MONGODB_URI: mongodb://${DB_USERNAME}:${DB_PASSWORD}@mongodb:27017/${DB_NAME}?authSource=admin
+            SPRING_DATA_MONGODB_URI: ${spring_data_mongo_uri}
         networks:
             - app-network
 

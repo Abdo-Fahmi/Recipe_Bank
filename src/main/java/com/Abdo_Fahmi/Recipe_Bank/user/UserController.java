@@ -44,9 +44,9 @@ public class UserController {
         return new ResponseEntity<>(foundUserDTO, HttpStatus.FOUND);
     }
 
-    @GetMapping("/search/{name}")
-    public ResponseEntity<UserDTO> findUserByName(@PathVariable String name) {
-        UserDTO foundUserDTO = userService.findUserByName(name);
+    @GetMapping("/search/{username}")
+    public ResponseEntity<UserDTO> findUserByName(@PathVariable String username) {
+        UserDTO foundUserDTO = userService.findUserByUsername(username);
         return new ResponseEntity<>(foundUserDTO, HttpStatus.FOUND);
     }
 

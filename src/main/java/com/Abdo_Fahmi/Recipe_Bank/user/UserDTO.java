@@ -10,7 +10,7 @@ import java.util.Set;
 @Builder
 public record UserDTO(
     String id,
-    String name,
+    String username,
     String email,
     Set<Role> role
 ) { }

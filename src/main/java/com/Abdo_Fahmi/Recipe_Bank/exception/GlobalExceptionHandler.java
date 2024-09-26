@@ -50,6 +50,16 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(TokenNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleUserNotFoundException(TokenNotFoundException e) {
+        return buildErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ErrorResponseDTO> handleUserNotFoundException(InvalidTokenException e) {
+        return buildErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
     private ResponseEntity<ErrorResponseDTO> buildErrorResponse(String message, HttpStatus status) {
         ErrorResponseDTO errorResponseDTO = ErrorResponseDTO.builder()
                 .message(message)

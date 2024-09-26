@@ -2,8 +2,8 @@ package com.Abdo_Fahmi.Recipe_Bank.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -14,17 +14,18 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
+@RequiredArgsConstructor
 public class JwtUtil {
     // Will be using a symmetric key for token generation for now
     // An asymmetric approach (generating a private/public pair using openssl)
     // is naturally more secure
     // Might implement that in the future
-    @Value("${JWT.key}")
+    @Value("${application.security.jwt.secret-key}")
     private String jwtSecretKey;
 
     public String generateToken(String name, long expiryDate) {
         Map<String, Object> claims = new HashMap<>();
-
+        
         return Jwts.builder()
                 .claims()
                 .add(claims)
@@ -37,7 +38,6 @@ public class JwtUtil {
     }
 
     private SecretKey getKey() {
-        // their may be better ways to do this but this is sufficient.
         return new SecretKeySpec(jwtSecretKey.getBytes(), "HmacSHA256");
     }
 
@@ -45,9 +45,9 @@ public class JwtUtil {
         return extractClaims(token, Claims::getSubject);
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
+    public boolean validateToken(String token, String username) {
         String name = extractUsername(token);
-        return (name.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (name.equals(username) && !isTokenExpired(token));
     }
 
     private Date extractExpirationDate(String token) {

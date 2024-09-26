@@ -26,9 +26,9 @@ public class UserService {
         User updatedUser = userRepo.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User doesn't exists"));
 
-        // Check if the name is already taken by another user
-        // The first check is to make sure the name/email are different (being changed) before we check for duplicates
-        if (!updatedUser.getName().equals(user.name()) && userRepo.existsByName(user.name()))
+        // Check if the username is already taken by another user
+        // The first check is to make sure the username/email are different (being changed) before we check for duplicates
+        if (!updatedUser.getUsername().equals(user.username()) && userRepo.existsByUsername(user.username()))
             throw new NameAlreadyInUseException("Name is already taken by another user");
 
         // Check if the email is already taken by another user
@@ -36,7 +36,7 @@ public class UserService {
             throw new EmailAlreadyInUseException("Email is already in use");
 
         // Applying changes
-        updatedUser.setName(user.name());
+        updatedUser.setUsername(user.username());
         updatedUser.setEmail(user.email());
 
         updatedUser = userRepo.save(updatedUser);
@@ -67,8 +67,8 @@ public class UserService {
         return UserMapper.toResponseDTO(user);
     }
 
-    public UserDTO findUserByName(String name) {
-        User user = userRepo.findByName(name)
+    public UserDTO findUserByUsername(String username) {
+        User user = userRepo.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         return UserMapper.toResponseDTO(user);
     }
